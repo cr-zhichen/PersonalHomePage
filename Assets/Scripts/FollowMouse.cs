@@ -22,13 +22,10 @@ public class FollowMouse : MonoBehaviour
         g = gameObject;
         oldPos = Input.mousePosition;
         newPos= Input.mousePosition;
-        thisPos = g.transform.position;
-        
-        //将thisPos转换为世界坐标
-        thisPos = Camera.main.ScreenToWorldPoint(thisPos);
+        thisPos = g.GetComponent<RectTransform>().anchoredPosition;
 
     }
-
+    
     private void Update()
     {
         //获取鼠标坐标
@@ -36,12 +33,17 @@ public class FollowMouse : MonoBehaviour
         
         var delta = (newPos - oldPos)/mobileDistanceThan;
         
+        if (Mathf.Abs(delta.x)>50||Mathf.Abs(delta.y)>50)
+        {
+            delta.x = 0;
+            delta.y = 0;
+        }
+
         if (delta.x==0&&delta.y==0)
         {
-            Vector2 gPos = Camera.main.ScreenToWorldPoint(g.transform.position);
-            Vector2 worldPos = Vector3.Lerp(gPos, thisPos, Time.deltaTime);
-            //将g的位置缓慢移动到thisPos
-            g.transform.position= Camera.main.WorldToScreenPoint(worldPos);
+            Vector2 gPos = g.GetComponent<RectTransform>().anchoredPosition;
+            Vector2 pos = Vector3.Lerp(gPos, thisPos, Time.deltaTime);
+            g.GetComponent<RectTransform>().anchoredPosition=pos;
                 
         }
         else
