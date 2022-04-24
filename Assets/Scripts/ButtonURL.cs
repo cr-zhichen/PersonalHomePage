@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ButtonURL : MonoBehaviour
+public class ButtonURL : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
 {
     public string url;
 
@@ -16,5 +17,19 @@ public class ButtonURL : MonoBehaviour
             Application.OpenURL(url);
         });
     }
+    //鼠标进入
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        // Debug.Log("鼠标进入");
+        GameManager.instance.ChangeCursor(2);
+    }
+    //鼠标离开
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        // Debug.Log("鼠标离开");
+        GameManager.instance.ChangeCursor(1);
+    }
+
+
 
 }
