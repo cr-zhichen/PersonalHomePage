@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>Unity WebGL Player | PersonalHomePage</title>
+  <title>程瑞的主页 | MADE WITH UNITY</title>
   <link rel="shortcut icon" href="TemplateData/favicon.ico">
   <link rel="stylesheet" href="TemplateData/style.css">
 </head>
@@ -55,13 +55,11 @@
     var config = {
       dataUrl: buildUrl + "/docs.data",
       frameworkUrl: buildUrl + "/docs.framework.js",
-      codeUrl: buildUrl + "/docs.wasm",
-      streamingAssetsUrl: "StreamingAssets",
+        codeUrl: buildUrl + "/docs.wasm",
+        streamingAssetsUrl: "StreamingAssets",
       companyName: "Zgccrui",
-      productName: "PersonalHomePage",
-      productVersion: "1.0",
-      showBanner: unityShowBanner,
-    };
+    showBanner: unityShowBanner,
+      };
 
     // By default Unity keeps WebGL canvas render target size matched with
     // the DOM size of the canvas element (scaled by window.devicePixelRatio)
@@ -75,7 +73,7 @@
 
       var meta = document.createElement('meta');
       meta.name = 'viewport';
-      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, shrink-to-fit=yes';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
       document.getElementsByTagName('head')[0].appendChild(meta);
       container.className = "unity-mobile";
 
@@ -83,13 +81,6 @@
       unityLogo.style.height = "128px";
       unityLogo.style.width = "256px";
       unityLogo.style.backgroundSize = "256px 128px";
-
-      // To lower canvas resolution on mobile devices to gain some
-      // performance, uncomment the following line:
-      // config.devicePixelRatio = 1;
-
-      // canvas.style.width = window.innerWidth + 'px';
-      // canvas.style.height = window.innerHeight + 'px';
     }
 
     loadingBar.style.display = "block";
