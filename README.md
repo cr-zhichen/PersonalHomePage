@@ -10,6 +10,4 @@
 
 [WebGl展示](https://cr-zhichen.github.io/PersonalHomePage/)  
 
-![动效](https://tc.chengrui.xyz/2022/04/25/NVIDIA_Share_wSx4qYpoYc.gif)
-![移动设备](https://tc.chengrui.xyz/2022/04/25/JRRsuGa98e.png)  
-
+https://user-images.githubusercontent.com/57337795/165060559-22a2b4e2-f69a-4dc7-b5af-7e44614f9547.mp4
