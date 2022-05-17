@@ -9,29 +9,20 @@ public class FollowMouse : MonoBehaviour
 
     private GameObject g;
 
-    private Vector2 oldPos;
-    private Vector2 newPos;
-    
     private Vector2 thisPos;
-
-    public Vector2 maxDistance;//最大移动距离
+    
     [FormerlySerializedAs("speed")] public float mobileDistanceThan=20;
 
     private void Start()
     {
         g = gameObject;
-        oldPos = Input.mousePosition;
-        newPos= Input.mousePosition;
         thisPos = g.GetComponent<RectTransform>().anchoredPosition;
 
     }
     
     private void Update()
     {
-        //获取鼠标坐标
-        newPos = Input.mousePosition;
-        
-        var delta = (newPos - oldPos)/mobileDistanceThan;
+        var delta = GameManager.instance.delta/mobileDistanceThan;
         
         if (Mathf.Abs(delta.x)>50||Mathf.Abs(delta.y)>50)
         {
@@ -53,8 +44,6 @@ public class FollowMouse : MonoBehaviour
             position = new Vector3(position.x+delta.x, position.y+delta.y, position.z);
             g.transform.position = position;
         }
-
-        oldPos=newPos;
     }
 
 }

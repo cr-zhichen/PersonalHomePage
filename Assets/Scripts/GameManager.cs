@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
         Cursor.SetCursor(cursor1, Vector2.zero, CursorMode.Auto);
+        
+        oldPos = Input.mousePosition;
+        newPos= Input.mousePosition;
     }
     
     public void ChangeCursor(int cursor)
@@ -34,6 +37,19 @@ public class GameManager : MonoBehaviour
         {
             Cursor.SetCursor(cursor2, Vector2.zero, CursorMode.Auto);
         }
+    }
+    
+    private Vector2 oldPos;
+    private Vector2 newPos;
+
+    public Vector2 delta;
+    
+    private void Update()
+    {
+        //获取鼠标坐标
+        newPos = Input.mousePosition;
+        delta = newPos - oldPos;
+        oldPos = newPos;
     }
 
     
