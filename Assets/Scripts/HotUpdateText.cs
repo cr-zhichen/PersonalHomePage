@@ -8,43 +8,142 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HotUpdateText : MonoBehaviour
 {
+    public Image bgImage => GameObject.Find("Bg").GetComponent<Image>();
+    public Camera mainCamera => GameObject.Find("Main Camera").GetComponent<Camera>();
+
+    public MaskCycle maskCycle => GameObject.Find("MixedColor").GetComponent<MaskCycle>();
+
     public TextMeshProUGUI nameText => GameObject.Find("Name").GetComponent<TextMeshProUGUI>();
     public TextMeshProUGUI introduce => GameObject.Find("Introduce").GetComponent<TextMeshProUGUI>();
+
     public GameObject linkPrefab => Resources.Load("Prefabs/Link") as GameObject;
     public GameObject linkParent => GameObject.Find("Links");
-    public ButtonURL eMailUrl => GameObject.Find("E-Mail").GetComponent<ButtonURL>();
-    public ButtonURL githubUrl => GameObject.Find("Github").GetComponent<ButtonURL>();
+
+    public GameObject buttonPrefab => Resources.Load("Prefabs/Button") as GameObject;
+    public GameObject buttonParent => GameObject.Find("Buttons");
+
+
     public GameObject informationPrefab => Resources.Load("Prefabs/Information") as GameObject;
     public GameObject informationParent => GameObject.Find("Informations");
 
     private void Awake()
     {
-        HTTPRequest request = new HTTPRequest(
-            new Uri(Path.Combine(Application.streamingAssetsPath, "config.json")), HTTPMethods.Get,
-            (originalRequest, response) =>
+        HttpServiceEncapsulation.GetStreamingAssets("config.json", (response =>
+        {
+            JObject json = JObject.Parse(response.DataAsText);
+
+            //=============读取光标=============//
+            HttpServiceEncapsulation.GetStreamingAssets(json["Pointer"]["NormalUrl"].ToString(), (httpResponse =>
             {
-                JObject json = JObject.Parse(response.DataAsText);
+                Texture2D texture = new Texture2D(1, 1);
+                texture.LoadImage(httpResponse.Data);
+                GameManager.instance.cursor1 = texture;
+            }));
 
-                nameText.text = json["Name"]?.ToString();
-                introduce.text = json["Introduce"]?.ToString();
-                foreach (var link in json["Links"])
-                {
-                    var linkObject = Instantiate(linkPrefab, linkParent.transform);
-                    linkObject.GetComponent<ButtonURL>().url = link["Url"]?.ToString();
-                    linkObject.GetComponent<TextMeshProUGUI>().text = link["Text"]?.ToString();
-                }
+            HttpServiceEncapsulation.GetStreamingAssets(json["Pointer"]["SuspensionUrl"].ToString(), (httpResponse =>
+            {
+                Texture2D texture = new Texture2D(1, 1);
+                texture.LoadImage(httpResponse.Data);
+                GameManager.instance.cursor2 = texture;
+            }));
 
-                eMailUrl.url = json["EMail"]?.ToString();
-                githubUrl.url = json["Github"]?.ToString();
-                foreach (var information in json["Informations"])
+            //=============读取背景=============//
+            HttpServiceEncapsulation.GetStreamingAssets(json["Background"]?["ImageUrl"]?.ToString(), (httpResponse =>
+            {
+                Texture2D texture = new Texture2D(1, 1);
+                texture.LoadImage(httpResponse.Data);
+                bgImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+                bgImage.enabled = true;
+            }));
+
+            ColorUtility.TryParseHtmlString(json["Background"]?["Color"]?.ToString(), out var bgColor);
+            mainCamera.backgroundColor = bgColor;
+
+
+            foreach (var maskUrl in json["Background"]?["MaskListUrl"])
+            {
+                HttpServiceEncapsulation.GetStreamingAssets(maskUrl.ToString(), (httpResponse =>
                 {
-                    var informationObject = Instantiate(informationPrefab, informationParent.transform);
-                    informationObject.GetComponent<ButtonURL>().url = information["Url"]?.ToString();
-                    informationObject.GetComponent<TextMeshProUGUI>().text = information["Text"]?.ToString();
-                }
-            }).Send();
+                    Debug.Log("11");
+                    Texture2D texture = new Texture2D(1, 1);
+                    texture.LoadImage(httpResponse.Data);
+                    maskCycle.masks.Add(texture);
+                }));
+            }
+
+            maskCycle.intervalTime = json["Background"]?["MaskIntervalTime"]?.ToObject<float>() ?? 0.1f;
+
+            ColorUtility.TryParseHtmlString(json["Background"]?["Color"]?.ToString(), out var maskColor);
+            maskCycle.GetComponent<RawImage>().color = maskColor;
+
+            //=============读取右侧装饰=============//
+
+            for (int i = 0; i < 5; i++)
+            {
+                string index = i.ToString();
+                HttpServiceEncapsulation.GetStreamingAssets(json["Decorate"]?[index]?["ImageUrl"]?.ToString(),
+                    (httpResponse =>
+                    {
+                        Texture2D texture = new Texture2D(1, 1);
+                        texture.LoadImage(httpResponse.Data);
+                        GameObject.Find($"R{index}").GetComponent<RawImage>().texture = texture;
+                        GameObject.Find($"R{index}").GetComponent<FollowMouse>().mobileDistanceThan =
+                            (float)json["Decorate"]?[$"{index}"]?["MobileDistanceThan"];
+                        
+                        GameObject.Find($"R{index}").GetComponent<RawImage>().enabled = true;
+                    }));
+            }
+
+            //=============读取文字=============//
+            nameText.text = json["Name"]?.ToString();
+            introduce.text = json["Introduce"]?.ToString();
+            foreach (var link in json["Links"])
+            {
+                var linkObject = Instantiate(linkPrefab, linkParent.transform);
+                linkObject.GetComponent<ButtonURL>().url = link["Url"]?.ToString();
+                linkObject.GetComponent<TextMeshProUGUI>().text = link["Text"]?.ToString();
+            }
+
+            //=============读取按钮=============//
+            foreach (var button in json["Buttons"])
+            {
+                HttpServiceEncapsulation.GetStreamingAssets(button["ImageUrl"].ToString(), (httpResponse =>
+                {
+                    var buttonObject = Instantiate(buttonPrefab, buttonParent.transform);
+
+                    var texture = new Texture2D(1, 1);
+                    texture.LoadImage(httpResponse.Data);
+                    buttonObject.GetComponent<Image>().sprite = Sprite.Create(texture,
+                        new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+
+                    HttpServiceEncapsulation.GetStreamingAssets(button["ImagePressUrl"].ToString(), (httpResponse1 =>
+                    {
+                        var texture1 = new Texture2D(1, 1);
+                        texture1.LoadImage(httpResponse1.Data);
+
+                        //设置变化状态
+                        SpriteState state = new SpriteState();
+                        state.highlightedSprite = Sprite.Create(texture1,
+                            new Rect(0, 0, texture1.width, texture1.height), new Vector2(0.5f, 0.5f));
+
+                        buttonObject.GetComponent<Button>().spriteState = state;
+                    }));
+
+                    buttonObject.GetComponent<ButtonURL>().url = button["Url"]?.ToString();
+                }));
+            }
+
+            //=============读取下方信息=============//
+            foreach (var information in json["Informations"])
+            {
+                var informationObject = Instantiate(informationPrefab, informationParent.transform);
+                informationObject.GetComponent<ButtonURL>().url = information["Url"]?.ToString();
+                informationObject.GetComponent<TextMeshProUGUI>().text = information["Text"]?.ToString();
+            }
+        }));
     }
 }

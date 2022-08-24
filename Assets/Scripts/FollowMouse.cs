@@ -13,9 +13,8 @@ public class FollowMouse : MonoBehaviour
     private Vector2 newPos;
     
     private Vector2 thisPos;
-
-    public Vector2 maxDistance;//最大移动距离
-    [FormerlySerializedAs("speed")] public float mobileDistanceThan=20;
+    
+    public float mobileDistanceThan;
 
     private void Start()
     {
