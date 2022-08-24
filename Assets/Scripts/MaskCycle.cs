@@ -20,14 +20,15 @@ public class MaskCycle : MonoBehaviour
         //无限遍历masks
         while (true)
         {
-            foreach (var t in masks)
+            for (int i = 0; i < masks.Count; i++)
             {
-                GetComponent<RawImage>().texture = t;
+                GetComponent<RawImage>().texture = masks[i];
                 yield return new WaitForSeconds(intervalTime);
             }
-        
+
             yield return null;
         }
+
         yield return null;
     }
 }

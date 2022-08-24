@@ -68,7 +68,6 @@ public class HotUpdateText : MonoBehaviour
             {
                 HttpServiceEncapsulation.GetStreamingAssets(maskUrl.ToString(), (httpResponse =>
                 {
-                    Debug.Log("11");
                     Texture2D texture = new Texture2D(1, 1);
                     texture.LoadImage(httpResponse.Data);
                     maskCycle.masks.Add(texture);
