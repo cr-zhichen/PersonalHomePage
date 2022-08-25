@@ -72,6 +72,7 @@ public class HotUpdateText : MonoBehaviour
                     Texture2D texture = new Texture2D(1, 1);
                     texture.LoadImage(httpResponse.Data);
                     maskCycle.masks.Add(texture);
+                    maskCycle.gameObject.GetComponent<RawImage>().enabled = true;
                 }));
             }
 
