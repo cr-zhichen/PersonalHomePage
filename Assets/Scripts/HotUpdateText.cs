@@ -142,8 +142,6 @@ public class HotUpdateText : MonoBehaviour
                 informationObject.GetComponent<ButtonURL>().url = information["Url"]?.ToString();
                 informationObject.GetComponent<TextMeshProUGUI>().text = information["Text"]?.ToString();
             }
-
-            //=============读取背景音乐=============//
         }));
         yield return null;
     }
