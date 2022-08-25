@@ -46,7 +46,7 @@
     },
     {
       "Text": "简历 <size=30>Resume",
-      "Url": "https://kai.chengrui.xyz/Resume/%E5%BC%A0%E7%A8%8B%E7%91%9E_Unity%E5%9C%B0%E7%BC%96%E5%AE%9E%E4%B9%A0_Unity%E5%BC%80%E5%8F%91%E5%AE%9E%E4%B9%A0_%E5%AE%9E%E4%B9%A0%E4%BA%A7%E5%93%81%E7%BB%8F%E7%90%86_%E5%A4%A7%E8%BF%9E%E4%B8%9C%E8%BD%AF%E4%BF%A1%E6%81%AF%E5%AD%A6%E9%99%A2_%E5%A4%A7%E4%B8%93.pdf"
+      "Url": "https://s.ccrui.cn/zPOZd"
     },
     {
       "Text": "图床 <size=30>Graphic Bed",
