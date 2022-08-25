@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class HotUpdateText : MonoBehaviour
@@ -30,21 +31,21 @@ public class HotUpdateText : MonoBehaviour
     public GameObject informationPrefab => Resources.Load("Prefabs/Information") as GameObject;
     public GameObject informationParent => GameObject.Find("Informations");
 
-    private void Awake()
+    IEnumerator Start()
     {
         HttpServiceEncapsulation.GetStreamingAssets("config.json", (response =>
         {
             JObject json = JObject.Parse(response.DataAsText);
 
             //=============读取光标=============//
-            HttpServiceEncapsulation.GetStreamingAssets(json["Pointer"]["NormalUrl"].ToString(), (httpResponse =>
+            HttpServiceEncapsulation.GetStreamingAssets(json["Pointer"]?["NormalUrl"]?.ToString(), (httpResponse =>
             {
                 Texture2D texture = new Texture2D(1, 1);
                 texture.LoadImage(httpResponse.Data);
                 GameManager.instance.cursor1 = texture;
             }));
 
-            HttpServiceEncapsulation.GetStreamingAssets(json["Pointer"]["SuspensionUrl"].ToString(), (httpResponse =>
+            HttpServiceEncapsulation.GetStreamingAssets(json["Pointer"]?["SuspensionUrl"]?.ToString(), (httpResponse =>
             {
                 Texture2D texture = new Texture2D(1, 1);
                 texture.LoadImage(httpResponse.Data);
@@ -64,7 +65,7 @@ public class HotUpdateText : MonoBehaviour
             mainCamera.backgroundColor = bgColor;
 
 
-            foreach (var maskUrl in json["Background"]?["MaskListUrl"])
+            foreach (var maskUrl in json["Background"]?["MaskListUrl"] ?? new JArray())
             {
                 HttpServiceEncapsulation.GetStreamingAssets(maskUrl.ToString(), (httpResponse =>
                 {
@@ -92,7 +93,7 @@ public class HotUpdateText : MonoBehaviour
                         GameObject.Find($"R{index}").GetComponent<RawImage>().texture = texture;
                         GameObject.Find($"R{index}").GetComponent<FollowMouse>().mobileDistanceThan =
                             (float)json["Decorate"]?[$"{index}"]?["MobileDistanceThan"];
-                        
+
                         GameObject.Find($"R{index}").GetComponent<RawImage>().enabled = true;
                     }));
             }
@@ -100,7 +101,7 @@ public class HotUpdateText : MonoBehaviour
             //=============读取文字=============//
             nameText.text = json["Name"]?.ToString();
             introduce.text = json["Introduce"]?.ToString();
-            foreach (var link in json["Links"])
+            foreach (var link in json["Links"] ?? new JArray())
             {
                 var linkObject = Instantiate(linkPrefab, linkParent.transform);
                 linkObject.GetComponent<ButtonURL>().url = link["Url"]?.ToString();
@@ -108,41 +109,42 @@ public class HotUpdateText : MonoBehaviour
             }
 
             //=============读取按钮=============//
-            foreach (var button in json["Buttons"])
+            foreach (var button in json["Buttons"] ?? new JArray())
             {
-                HttpServiceEncapsulation.GetStreamingAssets(button["ImageUrl"].ToString(), (httpResponse =>
+                var buttonObject = Instantiate(buttonPrefab, buttonParent.transform);
+                buttonObject.GetComponent<ButtonURL>().url = button["Url"]?.ToString();
+                HttpServiceEncapsulation.GetStreamingAssets(button["ImageUrl"]?.ToString(), (httpResponse =>
                 {
-                    var buttonObject = Instantiate(buttonPrefab, buttonParent.transform);
-
                     var texture = new Texture2D(1, 1);
                     texture.LoadImage(httpResponse.Data);
                     buttonObject.GetComponent<Image>().sprite = Sprite.Create(texture,
                         new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                    buttonObject.GetComponent<Image>().enabled = true;
+                }));
+                HttpServiceEncapsulation.GetStreamingAssets(button["ImagePressUrl"]?.ToString(), (httpResponse1 =>
+                {
+                    var texture1 = new Texture2D(1, 1);
+                    texture1.LoadImage(httpResponse1.Data);
 
-                    HttpServiceEncapsulation.GetStreamingAssets(button["ImagePressUrl"].ToString(), (httpResponse1 =>
-                    {
-                        var texture1 = new Texture2D(1, 1);
-                        texture1.LoadImage(httpResponse1.Data);
+                    //设置变化状态
+                    SpriteState state = new SpriteState();
+                    state.highlightedSprite = Sprite.Create(texture1,
+                        new Rect(0, 0, texture1.width, texture1.height), new Vector2(0.5f, 0.5f));
 
-                        //设置变化状态
-                        SpriteState state = new SpriteState();
-                        state.highlightedSprite = Sprite.Create(texture1,
-                            new Rect(0, 0, texture1.width, texture1.height), new Vector2(0.5f, 0.5f));
-
-                        buttonObject.GetComponent<Button>().spriteState = state;
-                    }));
-
-                    buttonObject.GetComponent<ButtonURL>().url = button["Url"]?.ToString();
+                    buttonObject.GetComponent<Button>().spriteState = state;
                 }));
             }
 
             //=============读取下方信息=============//
-            foreach (var information in json["Informations"])
+            foreach (var information in json["Informations"] ?? new JArray())
             {
                 var informationObject = Instantiate(informationPrefab, informationParent.transform);
                 informationObject.GetComponent<ButtonURL>().url = information["Url"]?.ToString();
                 informationObject.GetComponent<TextMeshProUGUI>().text = information["Text"]?.ToString();
             }
+
+            //=============读取背景音乐=============//
         }));
+        yield return null;
     }
 }

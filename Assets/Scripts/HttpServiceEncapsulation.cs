@@ -14,7 +14,7 @@ public static class HttpServiceEncapsulation
     /// <param name="response"></param>
     public static void GetStreamingAssets(string url, Action<HTTPResponse> response)
     {
-        if (url.Length == 0)
+        if (string.IsNullOrEmpty(url))
         {
             return;
         }

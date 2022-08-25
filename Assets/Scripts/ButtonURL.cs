@@ -14,6 +14,10 @@ public class ButtonURL : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         //监听按钮点击事件
         GetComponent<Button>().onClick.AddListener(() =>
         {
+            if (string.IsNullOrEmpty(url))
+            {
+                return;
+            }
             Application.OpenURL(url);
         });
     }
@@ -21,12 +25,20 @@ public class ButtonURL : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Debug.Log("鼠标进入");
+        if (string.IsNullOrEmpty(url))
+        {
+            return;
+        }
         GameManager.instance.ChangeCursor(2);
     }
     //鼠标离开
     public void OnPointerExit(PointerEventData eventData)
     {
         // Debug.Log("鼠标离开");
+        if (string.IsNullOrEmpty(url))
+        {
+            return;
+        }
         GameManager.instance.ChangeCursor(1);
     }
 
