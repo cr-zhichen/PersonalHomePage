@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using BestHTTP;
+using Best.HTTP;
 using UnityEngine;
 
 public static class HttpServiceEncapsulation
