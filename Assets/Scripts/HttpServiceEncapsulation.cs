@@ -1,10 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using Best.HTTP;
 using UnityEngine;
 
+/// <summary>
+/// Http服务封装
+/// </summary>
 public static class HttpServiceEncapsulation
 {
     /// <summary>
@@ -19,9 +20,6 @@ public static class HttpServiceEncapsulation
             return;
         }
 
-        HTTPRequest request = new HTTPRequest(
-            new Uri(Path.Combine(Application.streamingAssetsPath, url)), HTTPMethods.Get,
-            (originalRequest, _response) => { response?.Invoke(_response); }).Send();
+        HTTPRequest.CreateGet(new Uri(Path.Combine(Application.streamingAssetsPath, url)), (_, httpResponse) => { response?.Invoke(httpResponse); }).Send();
     }
-    
 }
