@@ -1,10 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using BestHTTP;
+using System.Threading.Tasks;
+using Best.HTTP;
 using UnityEngine;
 
+/// <summary>
+/// Http服务封装
+/// </summary>
 public static class HttpServiceEncapsulation
 {
     /// <summary>
@@ -19,9 +21,24 @@ public static class HttpServiceEncapsulation
             return;
         }
 
-        HTTPRequest request = new HTTPRequest(
-            new Uri(Path.Combine(Application.streamingAssetsPath, url)), HTTPMethods.Get,
-            (originalRequest, _response) => { response?.Invoke(_response); }).Send();
+        HTTPRequest.CreateGet(new Uri(Path.Combine(Application.streamingAssetsPath, url)), (_, httpResponse) => { response?.Invoke(httpResponse); }).Send();
     }
-    
+
+
+    /// <summary>
+    /// 获取StreamingAssets目录下的文件
+    /// </summary>
+    /// <param name="url"></param>
+    /// <returns></returns>
+    public static async Task<HTTPResponse> GetStreamingAssetsAsync(string url)
+    {
+        if (string.IsNullOrEmpty(url))
+        {
+            return null;
+        }
+
+        var response = new HTTPRequest(new Uri(Path.Combine(Application.streamingAssetsPath, url)));
+
+        return await response.GetHTTPResponseAsync();
+    }
 }

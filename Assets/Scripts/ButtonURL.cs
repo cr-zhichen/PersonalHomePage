@@ -1,11 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ButtonURL : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
+/// <summary>
+/// 按钮跳转到指定URL
+/// </summary>
+public class ButtonURL : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public string url;
 
@@ -21,7 +21,11 @@ public class ButtonURL : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
             Application.OpenURL(url);
         });
     }
-    //鼠标进入
+
+    /// <summary>
+    /// 鼠标进入
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Debug.Log("鼠标进入");
@@ -29,9 +33,13 @@ public class ButtonURL : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         {
             return;
         }
-        GameManager.instance.ChangeCursor(2);
+        GameManager.Instance.ChangeCursor(GameManager.CursorType.Select);
     }
-    //鼠标离开
+
+    /// <summary>
+    /// 鼠标离开
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerExit(PointerEventData eventData)
     {
         // Debug.Log("鼠标离开");
@@ -39,9 +47,6 @@ public class ButtonURL : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         {
             return;
         }
-        GameManager.instance.ChangeCursor(1);
+        GameManager.Instance.ChangeCursor(GameManager.CursorType.Normal);
     }
-
-
-
 }
