@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Best.HTTP;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -30,7 +31,7 @@ public static class HttpServiceEncapsulation
     /// </summary>
     /// <param name="url"></param>
     /// <returns></returns>
-    public static async Task<HTTPResponse> GetStreamingAssetsAsync(string url)
+    public static async UniTask<HTTPResponse> GetStreamingAssetsAsync(string url)
     {
         if (string.IsNullOrEmpty(url))
         {
