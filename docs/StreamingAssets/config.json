@@ -4,23 +4,23 @@
         "SuspensionUrl": "Image/Pointer/Suspension.png"
     },
     "Name": "HI I'M \nChengRui",
-    "Introduce": "AN College Students",
+    "Introduce": "A Unity development engineer",
     "Links": [
         {
             "Text": "博客 <size=30>Blog",
             "Url": "https://blog.ccrui.cn"
         },
         {
-            "Text": "简历 <size=30>Resume",
-            "Url": "https://s.ccrui.cn/zPOZd"
-        },
-        {
-            "Text": "作品集 <size=30>Portfolio",
-            "Url": "https://s.ccrui.cn/portfolio"
-        },
-        {
             "Text": "图床 <size=30>Graphic Bed",
-            "Url": "https://img.ccrui.cn/"
+            "Url": "https://img.ccrui.cn"
+        },
+        {
+            "Text": "服务器探针 <size=30>Server Probe",
+            "Url": "https://server.ccrui.cn"
+        },
+        {
+            "Text": "KMS服务 <size=30>KMS Server",
+            "Url": "https://kms.ccrui.cn"
         }
     ],
     "Buttons": [

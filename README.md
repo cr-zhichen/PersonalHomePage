@@ -40,22 +40,20 @@
     // 外部链接
     "Links": [
         {
-            // 链接文字
             "Text": "博客 <size=30>Blog",
-            // 链接地址
-            "Url": "https://www.ccrui.cn"
-        },
-        {
-            "Text": "简历 <size=30>Resume",
-            "Url": "https://s.ccrui.cn/zPOZd"
+            "Url": "https://blog.ccrui.cn"
         },
         {
             "Text": "图床 <size=30>Graphic Bed",
-            "Url": "https://tc.ccrui.cn/"
+            "Url": "https://img.ccrui.cn"
         },
         {
-            "Text": "云盘 <size=30>Cloud Disk",
-            "Url": "https://yun.ccrui.cn/"
+            "Text": "服务器探针 <size=30>Server Probe",
+            "Url": "https://server.ccrui.cn"
+        },
+        {
+            "Text": "KMS服务 <size=30>KMS Server",
+            "Url": "https://kms.ccrui.cn"
         }
     ],
     // 按钮
@@ -65,7 +63,7 @@
             "ImageUrl": "Image/Buttons/E-mail.png",
             // 鼠标悬浮时的按钮图片
             "ImagePressUrl": "Image/Buttons/E-mailPress.png",
-            "Url": "mailto:296529530@qq.com"
+            "Url": "mailto:zgccrui@outlook.com"
         },
         {
             "ImageUrl": "Image/Buttons/Github.png",
@@ -79,11 +77,11 @@
             // 信息文字
             "Text": "张程瑞ZGCCRUI - COPYRIGHT©2022",
             // 信息链接
-            "Url": "https://www.ccrui.cn/"
+            "Url": "https://blog.ccrui.cn"
         },
         {
             "Text": "黑ICP备19008070号",
-            "Url": "https://www.miit.gov.cn/"
+            "Url": "https://beian.miit.gov.cn/"
         }
     ],
     //右侧跟随的装饰图片 数量不可增加
